@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Title} from './Home';
+import {useHistory} from 'react-router-dom';
 
 const Form = styled.form`
-	height: 150px;
+	height: 200px;
 	width: 400px;
 	display: flex;
 	flex-direction: column;
@@ -31,37 +32,54 @@ const Button = styled.button`
 		transform: scale(1.2);
 `;
 
+function checkLogin(logged) {
+  return {type: 'INCORRECT_LOGIN', logged};
+}
 
-
-export default class Login extends React.Component {
-
+class Message extends React.Component {
 	constructor(props) {
 		super(props);
-
-		this.submit = this.submit.bind(this);
-	}
-
-	submit(event) {
-		event.preventDefault();
-		let logged;
-		if(event.target[0].value === 'Admin' && event.target[1].value === '12345') {
-			logged = true;
-		} else {
-			logged = false;
-		}
-		this.props.logged(logged);
 	}
 
 	render() {
-		return (
-			<div>
-				<Title>Вход</Title>
-				<Form onSubmit={this.submit}>
-					<Input type="text" name="username" placeholder="Введите ваш логин"/>
-					<Input type="text" name="password" placeholder="Введите ваш пароль"/>
-					<Button type="submit">Войти</Button>
-				</Form>
-			</div>
-		)
+		if(this.props.incorrectLogin) {
+			return (<p>Имя пользователя или пароль введены неверно.</p>)
+		} else {
+			return null
+		}
 	}
+}
+
+export default function Login(props) {
+	
+	const history = useHistory();
+
+	function redirect() {
+		history.push('/profile');
+	}
+
+	function submit(e) {
+		e.preventDefault();
+		let logged;
+		if(e.target[0].value === 'Admin' && e.target[1].value === '12345') {
+			logged = true;
+			localStorage.setItem('isLoggedIn', logged);
+			props.store.dispatch(checkLogin(false));
+			redirect();
+		} else {
+			props.store.dispatch(checkLogin(true));
+		}
+	}
+
+	return (
+		<div>
+			<Title>Вход</Title>
+			<Form onSubmit={submit}>
+				<Input type="text" name="username" placeholder="Введите ваш логин"/>
+				<Input type="text" name="password" placeholder="Введите ваш пароль"/>
+				<Button type="submit">Войти</Button>
+				<Message incorrectLogin={props.store.getState().incorrectLogin}/>
+			</Form>
+		</div>
+	)
 }

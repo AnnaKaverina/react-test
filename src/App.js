@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,6 +12,8 @@ import News from './pages/News';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import styled from 'styled-components';
+import store from './redux/store';
+import {connectToStore} from './redux/store';
 
 const Container = styled.div`
   width: 900px;
@@ -52,24 +53,10 @@ const MainScreen = styled.section`
   padding: 10px;
 `;
 
-export default class App extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isLoggedIn: false
-    };
-
-    this.logged = this.logged.bind(this);
-  }
-
-  logged(isLoggedIn) {
-    this.setState({isLoggedIn});
-  }
+class App extends React.Component {
 
   render() {
-    const isLoggedIn = this.state.isLoggedIn;
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
     return (
       <Router>
         <Container>
@@ -101,7 +88,7 @@ export default class App extends React.Component {
                 {isLoggedIn ? <Profile /> : <Redirect to="/login" />}
               </Route>
               <Route path="/login">
-                <Login logged={this.logged} log={this.state.isLoggedIn}/>
+                <Login store={store}/>
               </Route>
             </Switch>
           </MainScreen>
@@ -111,3 +98,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default connectToStore(App);

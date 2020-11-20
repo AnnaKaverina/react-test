@@ -34,8 +34,8 @@ export default class News extends React.Component {
 			<div>
 				<Title>Новости</Title>
 				<ItemsWrapper>
-					{this.state.news.map((item) => 
-						<NewsItem title={item.title} descr={item.descr} img={item.img} />
+					{this.state.news.map((item, i) => 
+						<NewsItem title={item.title} descr={item.descr} img={item.img} key={i} />
 					)}
 				</ItemsWrapper>
 			</div>
