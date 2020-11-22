@@ -12,7 +12,7 @@ import News from './pages/News';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import styled from 'styled-components';
-import store from './redux/store';
+import {store} from './redux/store';
 import {connectToStore} from './redux/store';
 
 const Container = styled.div`

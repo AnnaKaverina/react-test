@@ -32,6 +32,7 @@ const Button = styled.button`
 		transform: scale(1.2);
 `;
 
+//action creator
 function checkLogin(logged) {
   return {type: 'INCORRECT_LOGIN', logged};
 }
@@ -54,10 +55,6 @@ export default function Login(props) {
 	
 	const history = useHistory();
 
-	function redirect() {
-		history.push('/profile');
-	}
-
 	function submit(e) {
 		e.preventDefault();
 		let logged;
@@ -65,7 +62,7 @@ export default function Login(props) {
 			logged = true;
 			localStorage.setItem('isLoggedIn', logged);
 			props.store.dispatch(checkLogin(false));
-			redirect();
+			history.push('/profile');
 		} else {
 			props.store.dispatch(checkLogin(true));
 		}

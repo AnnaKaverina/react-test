@@ -1,17 +1,15 @@
 import {createStore} from 'redux';
 import {connect} from 'react-redux';
 
-//action
-const CORRECT_LOGIN = 'INCORRECT_LOGIN';
-
-export function checkLogin(logged) {
-  return {type: 'INCORRECT_LOGIN', logged};
-}
-
 //default state
 const initialState = {
   incorrectLogin: ''
 };
+
+//action creator
+function checkLogin(logged) {
+	return {type: 'INCORRECT_LOGIN', logged};
+  }
 
 //reducer
 function loginApp(state = initialState, action) {
@@ -26,18 +24,18 @@ function loginApp(state = initialState, action) {
 }
 
 const mapStateToProps = state => ({
-  correctLogin: state.incorrectLogin
+  incorrectLogin: state.incorrectLogin
 });
 
 const mapDispatchToProps = dispatch => {
   return {
-		loginApp: () => dispatch({ type: 'INCORRECT_LOGIN' })
+		checkLogin: (logged) => dispatch(checkLogin(logged))
 	};
 };
 
 export const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 
 //store
-const store = createStore(loginApp);
+export const store = createStore(loginApp);
 
 export default store;
